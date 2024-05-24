@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bonbas_de_agua
+{
+    internal class DatosGasolina
+    {
+     
+            public string Nombre { get; set; }
+            public float Galones { get; set; }
+            public string TipoGasolina { get; set; }
+        
+        public DatosGasolina(string nombre, float galones, string tipoGasolina)
+        {
+            Nombre = nombre;
+            Galones = galones;
+            TipoGasolina = tipoGasolina;
+        }
+    }
+}
