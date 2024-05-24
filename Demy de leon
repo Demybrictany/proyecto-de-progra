@@ -1,0 +1,106 @@
+const int echo = A1;
+const int trigger = A0;
+long tiempo;
+float distancia;
+int leds[] = {2, 3, 4, 5, 6, 7};
+int bomba = 8;
+void setup() 
+{
+  for (int i = 0; i < 6; i++)
+  {
+    pinMode(leds[i], OUTPUT);
+  }
+  
+  pinMode(echo, INPUT);
+  pinMode(trigger, OUTPUT);
+  pinMode(bomba, OUTPUT);
+  Serial.begin(9600);
+  delay(10);
+}
+
+void loop() 
+{
+  medir();
+  
+  Serial.print("Distancia: ");
+  Serial.print(distancia);  // Enviamos serialmente el valor de la distancia
+  Serial.print(" cm");
+  Serial.println();
+
+  indicador_nivel();
+}
+
+void medir()
+{
+  digitalWrite(trigger, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigger, LOW);
+  
+  tiempo = pulseIn(echo, HIGH);
+  distancia = float(tiempo * 0.0343) / 2;
+  delay(10);
+}
+//condiciones segun la distancia del tanque
+void indicador_nivel()
+{
+  for (int i = 0; i < 6; i++)
+  {
+    digitalWrite(leds[i], LOW);
+  }
+
+
+  if (distancia > 20)
+  {
+    digitalWrite(bomba,HIGH);
+   digitalWrite(leds[0], HIGH);
+  }
+  else if (distancia > 14)
+  {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+     digitalWrite(bomba,HIGH);
+  }
+  else if (distancia > 8)
+  {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+     digitalWrite(bomba,HIGH);
+   
+  }
+  else if (distancia > 5)
+  {
+    digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+     digitalWrite(leds[3], HIGH); 
+     digitalWrite(bomba,HIGH);
+ 
+  }
+  else if (distancia >4)
+  {
+     digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+     digitalWrite(leds[3], HIGH);
+    digitalWrite(leds[4], HIGH);
+     digitalWrite(bomba,HIGH);
+  }
+  else
+  {
+   digitalWrite(leds[0], HIGH);
+    digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
+     digitalWrite(leds[3], HIGH);
+    digitalWrite(leds[4], HIGH);
+     digitalWrite(leds[5], HIGH);
+      digitalWrite(bomba,LOW);
+
+  }
+
+ 
+
+  
+}
