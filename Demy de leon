@@ -1,9 +1,12 @@
+#include <ArduinoJson.h>
 const int echo = A1;
 const int trigger = A0;
 long tiempo;
 float distancia;
 int leds[] = {2, 3, 4, 5, 6, 7};
 int bomba = 8;
+int ledPin = 11;
+
 void setup() 
 {
   for (int i = 0; i < 6; i++)
@@ -14,6 +17,7 @@ void setup()
   pinMode(echo, INPUT);
   pinMode(trigger, OUTPUT);
   pinMode(bomba, OUTPUT);
+  pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
   delay(10);
 }
@@ -28,6 +32,7 @@ void loop()
   Serial.println();
 
   indicador_nivel();
+  IngresarDatos();
 }
 
 void medir()
@@ -103,4 +108,41 @@ void indicador_nivel()
  
 
   
+}
+
+void IngresarDatos()
+{
+if (Serial.available() > 0) {
+    String json = Serial.readString();
+    DynamicJsonDocument doc(1024);
+    Serial.println("JSON recibido:");
+Serial.println(json);
+
+    DeserializationError error = deserializeJson(doc, json);
+
+    if (error) {
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.println(error.f_str());
+      return;
+    }
+
+    const char* nombre = doc["Nombre"];
+    const int galones = doc["Galones"];
+    const char* tipoGasolina = doc["TipoGasolina"];
+
+    Serial.println("Datos recibidos:");
+    Serial.println(nombre);
+    Serial.println(galones);
+    Serial.println(tipoGasolina);
+
+   if (galones > 0 && nombre != nullptr && tipoGasolina != nullptr)
+   {
+      digitalWrite(ledPin, HIGH);
+      
+    } else {
+      digitalWrite(ledPin, HIGH);
+      
+    }
+
+  }
 }
